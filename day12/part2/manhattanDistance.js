@@ -2,7 +2,6 @@ const { readLines } = require('../../fileReader')
 
 async function main() {
     let navInstructions = await readLines('../input.txt');
-    const directions = ['E', 'S', 'W', 'N'];
     let curX = 0;
     let curY = 0;
     let waypointX = 10;
