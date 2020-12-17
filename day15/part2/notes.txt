@@ -1,0 +1,10 @@
+
+My solution for part1 involved a loop where I filled up an object according to the conditions described in the problem. A couple missteps that took a bit of debugging but I was able to solve it pretty quickly. The problem needed the 2020th value filled so my loop ran 2020 times. Got the answer
+Then, part2 asked for the 30000000th (thirty millionth) value. Simple enough. My solution was linear (just the one loop) so I didn't think it'd be a big deal to run it 30000000 times. Except it was. The program was not ending. There was no chance of an infinite loop coz it's a straightforward for loop with no conditional increments of the index. So it HAD to end after 30 million turns
+Confused, I measured how long it takes to solve a smaller number of turns. 3k took 15ms, 30k took 25ms, 300k took 300ms. So far so good. But 3mil took 30 whole seconds! This wasn't linear at all, even though the code was. No wonder 30 mil was taking forever
+Then it hit me (don't read further if you wanna try and guess the solution :P ). It's all because I'm using an object. Object lookups are constant time in theory. But when you have an object with millions of elements, that "constant" lookup takes a looooong time. Especially when you need to do it millions of times.
+Then I realised that, according to the problem conditions, the highest key of the object will never be bigger than the length of the loop, so I replaced it with an Array initialised with 30 million elements.
+And suddenly, 3 million turns took just 144ms instead of 30 seconds. And 30 million turns was done in only 2 seconds instead of however many hours it might've taken. 
+The things you learn
+
+This was a text sent to Cyrus
