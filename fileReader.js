@@ -14,7 +14,7 @@ async function readLines(filepath) {
       }
     }
   } catch (err) {
-  console.error(err);
+    console.error(err);
   }
 
   return lines;
