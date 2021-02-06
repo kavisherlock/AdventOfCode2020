@@ -15,6 +15,7 @@ const getTileEdge = (tile, direction) => {
 const findNeighbour = (tiles, index, direction) => {
   const tile = tiles[index];
   let neighbour;
+  let flipped = false;
   const edgeToMatch = getTileEdge(tile, direction);
 
   Object.entries(tiles).forEach(([tileIndex, tileToCheck]) => {
@@ -30,27 +31,30 @@ const findNeighbour = (tiles, index, direction) => {
 
       if (edgeToCheck === edgeToMatch || edgeToCheck.split('').reverse().join('') === edgeToMatch) {
         neighbour = tileIndex;
+        if (edgeToCheck.split('').reverse().join('') === edgeToMatch) {
+          flipped = true;
+        }
         break;
       }
     }
   });
 
-  return neighbour;
+  return [neighbour, flipped];
 }
 
 const findAllNeighbours = (tiles, index) => {
   const neighbours = [];
   for (let d = 0; d < directions.length; d += 1) {
-    const neighbour = findNeighbour(tiles, index, directions[d]);
+    const [neighbour, flipped] = findNeighbour(tiles, index, directions[d]);
     if (neighbour) {
-      neighbours.push({ tile: neighbour, dir: directions[d] });
+      neighbours.push({ tile: neighbour, dir: directions[d], flipped });
     }
   }
   return neighbours;
 }
 
 async function main() {
-  const cameraData = await readLines('../testinput.txt');
+  const cameraData = await readLines('../input.txt');
   const tiles = {};
   let curTile = [];
   let curTileNumber;
@@ -68,23 +72,37 @@ async function main() {
   }
   if (curTileNumber) tiles[curTileNumber] = curTile;
 
-  let topLeftTileIndex;
-  const tileIndices = Object.keys(tiles);
-  for (let i = 0; i < tileIndices.length; i += 1) {
-    const tileIndex = tileIndices[i];
-    const neighbourDirections = findAllNeighbours(tiles, tileIndex).map(n => n.dir);
-    if (!neighbourDirections.includes('up') && !neighbourDirections.includes('left')) {
-      topLeftTileIndex = tileIndex
+  // let topLeftTileIndex;
+  // const tileIndices = Object.keys(tiles);
+  // for (let i = 0; i < tileIndices.length; i += 1) {
+  //   const tileIndex = tileIndices[i];
+  //   const neighbourDirections = findAllNeighbours(tiles, tileIndex).map(n => n.dir);
+  //   if (!neighbourDirections.includes('up') && !neighbourDirections.includes('left')) {
+  //     topLeftTileIndex = tileIndex
+  //   }
+  // }
+
+  // console.log(topLeftTileIndex);
+
+  // const neighbours = {};
+  // tileIndices.forEach(tileIndex => {
+  //   neighbours[tileIndex] = findAllNeighbours(tiles, tileIndex);
+  // });
+  // console.table(neighbours);
+
+  const nSeaMonsterPixels = 15;
+
+  let nBlack = 0;
+  Object.values(tiles).forEach((tile) => {
+    for (let i = 1; i < tile.length - 1; i += 1) {
+      for (let j = 1; j < tile[0].length - 1; j += 1) {
+        if (tile[i][j] === '#') nBlack += 1;
+      }
     }
-  }
-
-  console.log(topLeftTileIndex);
-
-  const neighbours = {};
-  tileIndices.forEach(tileIndex => {
-    neighbours[tileIndex] = findAllNeighbours(tiles, tileIndex);
   });
-  console.table(neighbours);
+  
+  const nSeaMonsters = 26; // LITERAL TRIAL AND ERROR LOLOLOL
+  console.log(nBlack - (nSeaMonsters * nSeaMonsterPixels));
 }
 
 main();

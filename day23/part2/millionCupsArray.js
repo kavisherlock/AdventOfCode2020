@@ -64,7 +64,7 @@ const move = (inputCups, curCupIndex) => {
 
 const performMoves = (cupInput, nMoves) => {
   let output = cupInput.split('').map(c => parseInt(c, 10));
-  for (let i = 10; i < NCUPS; i += 1) {
+  for (let i = 10; i <= NCUPS; i += 1) {
     output.push(i);
   }
   let curCupIndex = 0;
